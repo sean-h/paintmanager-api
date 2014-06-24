@@ -1,0 +1,6 @@
+Gemfile.lock
+db/*.sqlite
+*.log
+/.yardoc/
+/doc/
+/rdoc/
