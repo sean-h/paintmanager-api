@@ -8,8 +8,38 @@ require_relative './user'
 
 class Routes < Sinatra::Base
 
+  after do
+    ActiveRecord::Base.connection.close
+  end
+
   get '/' do
 
+  end
+
+  get '/brands' do
+    return Brand.all.to_json
+  end
+
+  get '/brands/:id' do |id|
+    return Brand.where(:id => id).to_json
+  end
+
+  post '/brands' do
+    brand = Brand.create(name: params[:name])
+    return brand.to_json
+  end
+
+  get '/ranges' do
+    return PaintRange.all.to_json
+  end
+
+  get '/ranges/:id' do |id|
+    return PaintRange.where(:id => id).to_json
+  end
+
+  post '/ranges' do
+    range = PaintRange.create(name: params[:name], brand_id: params[:brand_id])
+    return range.to_json
   end
 
   get '/paints' do
@@ -21,7 +51,7 @@ class Routes < Sinatra::Base
   end
 
   post '/paints' do
-    paint = Paint.create(name: params[:name], color: params[:color])
+    paint = Paint.create(name: params[:name], color: params[:color], range_id: params[:range_id])
     return paint.to_json
   end
 
