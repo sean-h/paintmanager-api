@@ -8,7 +8,6 @@ require_relative './user'
 require_relative './status_key'
 
 class Routes < Sinatra::Base
-
   after do
     ActiveRecord::Base.connection.close
   end
@@ -22,7 +21,7 @@ class Routes < Sinatra::Base
   end
 
   get '/brands/:id' do |id|
-    return Brand.where(:id => id).to_json
+    return Brand.where(id: id).to_json
   end
 
   post '/brands' do
@@ -35,11 +34,12 @@ class Routes < Sinatra::Base
   end
 
   get '/ranges/:id' do |id|
-    return PaintRange.where(:id => id).to_json
+    return PaintRange.where(id: id).to_json
   end
 
   post '/ranges' do
-    range = PaintRange.create(name: params[:name], brand_id: params[:brand_id])
+    range = PaintRange.create(name: params[:name],
+                              brand_id: params[:brand_id])
     return range.to_json
   end
 
@@ -48,11 +48,13 @@ class Routes < Sinatra::Base
   end
 
   get '/paints/:id' do |id|
-    return Paint.where(:id => id).to_json
+    return Paint.where(id: id).to_json
   end
 
   post '/paints' do
-    paint = Paint.create(name: params[:name], color: params[:color], range_id: params[:range_id])
+    paint = Paint.create(name: params[:name],
+                         color: params[:color],
+                         range_id: params[:range_id])
     return paint.to_json
   end
 
@@ -61,7 +63,7 @@ class Routes < Sinatra::Base
   end
 
   get '/status_keys/:id' do |id|
-    return StatusKey.where(:id => id).to_json
+    return StatusKey.where(id: id).to_json
   end
 
   post '/status_keys' do
@@ -80,13 +82,14 @@ class Routes < Sinatra::Base
     paints = Paint.select('paints.*, COALESCE(paint_statuses.status, 1) AS status')
       .joins('LEFT OUTER JOIN paint_statuses ON paints.id = paint_statuses.paint_id')
     status_keys = StatusKey.all
-    data = {brand: brands, paint_range: ranges, paint: paints, status_key: status_keys}
+    data = { brand: brands, paint_range: ranges,
+             paint: paints, status_key: status_keys }
     return data.to_json
   end
 
-  if app_file == $0
-    db_config = YAML::load(File.open('db/config.yml'))
-    ActiveRecord::Base.establish_connection(db_config["development"])
+  if app_file == $PROGRAM_NAME
+    db_config = YAML.load(File.open('db/config.yml'))
+    ActiveRecord::Base.establish_connection(db_config['development'])
     set :bind, '0.0.0.0'
     run!
   end
