@@ -55,6 +55,14 @@ class Routes < Sinatra::Base
     return paint.to_json
   end
 
+  get '/sync' do
+    brands = Brand.all
+    ranges = PaintRange.all
+    paints = Paint.all
+    data = {brand: brands, paint_range: ranges, paint: paints}
+    return data.to_json
+  end
+
   if app_file == $0
     db_config = YAML::load(File.open('db/config.yml'))
     ActiveRecord::Base.establish_connection(db_config["development"])
