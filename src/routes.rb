@@ -6,6 +6,7 @@ require_relative './paint'
 require_relative './paint_range'
 require_relative './user'
 require_relative './status_key'
+require_relative './paint_status'
 
 class Routes < Sinatra::Base
   after do
@@ -67,13 +68,25 @@ class Routes < Sinatra::Base
   end
 
   post '/status_keys' do
-    status_key = StatusKey.create(name: params[:name])
+    status_key = StatusKey.create(name: params[:name], color: params[:color])
     return status_key.to_json
   end
 
   post '/user' do
     user = User.create(email: params[:email], password: params[:password])
     return user.to_json
+  end
+
+  get '/paint_statuses' do
+    return PaintStatus.all.to_json
+  end
+
+  post '/paint_statuses' do
+    #status = PaintStatus.where(id: params['paint_id'])
+    status = PaintStatus.where(paint_id: params['paint_id'], user_id: 1).first_or_create
+    status.status = params['status']
+    status.save
+    return status.to_json
   end
 
   get '/sync' do
