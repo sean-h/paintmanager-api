@@ -5,6 +5,7 @@ require_relative './brand'
 require_relative './paint'
 require_relative './paint_range'
 require_relative './user'
+require_relative './status_key'
 
 class Routes < Sinatra::Base
 
@@ -55,17 +56,38 @@ class Routes < Sinatra::Base
     return paint.to_json
   end
 
+  get '/status_keys' do
+    return StatusKey.all.to_json
+  end
+
+  get '/status_keys/:id' do |id|
+    return StatusKey.where(:id => id).to_json
+  end
+
+  post '/status_keys' do
+    status_key = StatusKey.create(name: params[:name])
+    return status_key.to_json
+  end
+
+  post '/user' do
+    user = User.create(email: params[:email], password: params[:password])
+    return user.to_json
+  end
+
   get '/sync' do
     brands = Brand.all
     ranges = PaintRange.all
-    paints = Paint.all
-    data = {brand: brands, paint_range: ranges, paint: paints}
+    paints = Paint.select('paints.*, COALESCE(paint_statuses.status, 1) AS status')
+      .joins('LEFT OUTER JOIN paint_statuses ON paints.id = paint_statuses.paint_id')
+    status_keys = StatusKey.all
+    data = {brand: brands, paint_range: ranges, paint: paints, status_key: status_keys}
     return data.to_json
   end
 
   if app_file == $0
     db_config = YAML::load(File.open('db/config.yml'))
     ActiveRecord::Base.establish_connection(db_config["development"])
+    set :bind, '0.0.0.0'
     run!
   end
 end
