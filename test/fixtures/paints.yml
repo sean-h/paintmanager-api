@@ -1,0 +1,11 @@
+red:
+  id: 1
+  name: Red
+  color: '#FF0000'
+  range_id: 1
+
+blue:
+  id: 2
+  name: Blue
+  color: '#0000FF'
+  range_id: 2

@@ -82,7 +82,6 @@ class Routes < Sinatra::Base
   end
 
   post '/paint_statuses' do
-    #status = PaintStatus.where(id: params['paint_id'])
     status = PaintStatus.where(paint_id: params['paint_id'], user_id: 1).first_or_create
     status.status = params['status']
     status.save
@@ -105,5 +104,8 @@ class Routes < Sinatra::Base
     ActiveRecord::Base.establish_connection(db_config['development'])
     set :bind, '0.0.0.0'
     run!
+  else
+    db_config = YAML.load(File.open('db/config.yml'))
+    ActiveRecord::Base.establish_connection(db_config['test'])
   end
 end

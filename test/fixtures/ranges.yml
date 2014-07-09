@@ -1,0 +1,9 @@
+reds:
+  id: 1
+  name: Reds
+  brand_id: 1
+
+blues:
+  id: 2
+  name: Blues
+  brand_id: 1
