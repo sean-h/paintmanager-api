@@ -14,16 +14,20 @@ class Routes < Sinatra::Base
     ActiveRecord::Base.connection.close
   end
 
+  get '/' do
+    send_file 'index.html'
+  end
+
   # @method /brands
   # Returns all Brands.
-  get '/brands' do
+  get '/brands.json' do
     return Brand.all.to_json
   end
 
   # @method /brands/id
   # @param id [Integer] The Brand's id.
   # Returns Brand that matches the given id.
-  get '/brands/:id' do |id|
+  get '/brands/:id.json' do |id|
     return Brand.where(id: id).to_json
   end
 
@@ -37,14 +41,14 @@ class Routes < Sinatra::Base
 
   # @method /ranges
   # Returns all PaintRanges.
-  get '/ranges' do
+  get '/ranges.json' do
     return PaintRange.all.to_json
   end
 
   # @method /ranges/id
   # @param id [Integer] The PaintRange's id.
   # Returns the PaintRange with the given id.
-  get '/ranges/:id' do |id|
+  get '/ranges/:id.json' do |id|
     return PaintRange.where(id: id).to_json
   end
 
@@ -60,14 +64,14 @@ class Routes < Sinatra::Base
 
   # @method /paints
   # Returns all Paints.
-  get '/paints' do
+  get '/paints.json' do
     return Paint.all.to_json
   end
 
   # @method /paints/id
   # @param id [Integer] The Paint to fetch with given id.
   # Returns Paint with given id.
-  get '/paints/:id' do |id|
+  get '/paints/:id.json' do |id|
     return Paint.where(id: id).to_json
   end
 
@@ -85,14 +89,14 @@ class Routes < Sinatra::Base
 
   # @method /status_key
   # Returns all StatusKeys
-  get '/status_keys' do
+  get '/status_keys.json' do
     return StatusKey.all.to_json
   end
 
   # @method /status_keys/id
   # @param id [Integer] The id of the StatusKey to fetch.
   # Returns StatusKey with given id.
-  get '/status_keys/:id' do |id|
+  get '/status_keys/:id.json' do |id|
     return StatusKey.where(id: id).to_json
   end
 
@@ -116,7 +120,7 @@ class Routes < Sinatra::Base
 
   # @method /paint_statuses
   # Returns all the PaintStatuses
-  get '/paint_statuses' do
+  get '/paint_statuses.json' do
     return PaintStatus.all.to_json
   end
 
@@ -134,7 +138,7 @@ class Routes < Sinatra::Base
 
   # @method /sync
   # Returns all Brands, PaintRanges, Paints and StatusKeys.
-  get '/sync' do
+  get '/sync.json' do
     brands = Brand.all
     ranges = PaintRange.all
     paints = Paint.select('paints.*,
@@ -151,6 +155,7 @@ class Routes < Sinatra::Base
     db_config = YAML.load(File.open('db/config.yml'))
     ActiveRecord::Base.establish_connection(db_config['development'])
     set :bind, '0.0.0.0'
+    set :public, 'public'
     run!
   else
     db_config = YAML.load(File.open('db/config.yml'))
