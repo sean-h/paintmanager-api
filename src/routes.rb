@@ -155,7 +155,7 @@ class Routes < Sinatra::Base
     db_config = YAML.load(File.open('db/config.yml'))
     ActiveRecord::Base.establish_connection(db_config['development'])
     set :bind, '0.0.0.0'
-    set :public, 'public'
+    set :public_folder, 'public'
     run!
   else
     db_config = YAML.load(File.open('db/config.yml'))
