@@ -15,7 +15,7 @@ class Routes < Sinatra::Base
   end
 
   get '/' do
-    send_file 'index.html'
+    send_file File.join(settings.public_folder, 'views/index.html')
   end
 
   # @method /brands
@@ -37,6 +37,18 @@ class Routes < Sinatra::Base
   post '/brands' do
     brand = Brand.create(name: params[:name])
     return brand.to_json
+  end
+
+  # @method /brands.json
+  post '/brands.json' do
+    return 'Missing json data' if params[:json].nil?
+
+    json = JSON.parse(params[:json])
+    if json['kind'] == 'Brand'
+      json['data'].each do |brand|
+        Brand.create(name: brand['name'])
+      end
+    end
   end
 
   # @method /ranges
@@ -62,6 +74,19 @@ class Routes < Sinatra::Base
     return range.to_json
   end
 
+  # @method /ranges.json
+  post '/ranges.json' do
+    return 'Missing json data' if params[:json].nil?
+
+    json = JSON.parse(params[:json])
+    if json['kind'] == 'Range'
+      json['data'].each do |range|
+        Range.create(name: range['name'],
+                     brand_id: range['brand_id'])
+      end
+    end
+  end
+
   # @method /paints
   # Returns all Paints.
   get '/paints.json' do
@@ -85,6 +110,20 @@ class Routes < Sinatra::Base
                          color: params[:color],
                          range_id: params[:range_id])
     return paint.to_json
+  end
+
+  # @method /paints.json
+  post '/paints.json' do
+    return 'Missing json data' if params[:json].nil?
+
+    json = JSON.parse(params[:json])
+    if json['kind'] == 'Paint'
+      json['data'].each do |paint|
+        Paint.create(name: paint['name'],
+                     color: paint['color'],
+                     range_id: paint['range_id'])
+      end
+    end
   end
 
   # @method /status_key

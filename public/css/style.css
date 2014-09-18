@@ -1,0 +1,21 @@
+.paint_name {
+  color: #fff;
+}
+
+.paint_color {
+  padding-left: 25px;
+}
+
+th {
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 16pt;
+}
+
+tr:nth-child(even) {
+  background-color: #444;
+}
+
+tr:nth-child(odd) {
+  background-color: #555;
+}
