@@ -6,9 +6,21 @@
   padding-left: 25px;
 }
 
+.paint_status.inactive {
+  opacity: 0.2;
+}
+
+.paint_status.active {
+  opacity: 1.0;
+}
+
+.paint_status:hover {
+  opacity: 1.0;
+}
+
 th {
-  padding-left: 10px;
-  padding-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   font-size: 16pt;
 }
 

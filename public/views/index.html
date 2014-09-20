@@ -11,9 +11,22 @@
             <tr ng-repeat="paint in paints">
                 <th class="paint_color" style="background-color: {{ paint.color }}"></th>
                 <th class="paint_name">{{ paint.name }}</th>
-                <th ng-repeat="status in status_keys">
-                  <font color="{{status.color}}">{{ status.name }}</font>
-                  </th>
+                <th ng-repeat="status in status_keys" >
+
+                  <div ng-if="paint.status == status.id" 
+                       class="paint_status active" 
+                       style="background-color: {{ status.color }}">
+                    {{status.name}}
+                  </div>
+
+                  <div ng-if="paint.status != status.id" 
+                       ng-click="paint.status = status.id" 
+                       class="paint_status inactive" 
+                       style="background-color: {{ status.color }}">
+                    {{status.name}}
+                  </div>
+
+                </th>
             </tr>
           </table>
         </div>
