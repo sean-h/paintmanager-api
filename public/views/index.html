@@ -6,27 +6,24 @@
         <script src="controllers/controllers.js"></script>
     </head>
     <body>
-        <div ng-controller="PaintsController">
+      <div ng-controller="PaintsController">
+        <input ng-model="query.name">
           <table>
-            <tr ng-repeat="paint in paints">
+            <tr ng-repeat="paint in paints| filter:query">
                 <th class="paint_color" style="background-color: {{ paint.color }}"></th>
                 <th class="paint_name">{{ paint.name }}</th>
-                <th ng-repeat="status in status_keys" >
-
-                  <div ng-if="paint.status == status.id" 
-                       class="paint_status active" 
-                       style="background-color: {{ status.color }}">
-                    {{status.name}}
-                  </div>
-
-                  <div ng-if="paint.status != status.id" 
-                       ng-click="paint.status = status.id" 
-                       class="paint_status inactive" 
-                       style="background-color: {{ status.color }}">
-                    {{status.name}}
-                  </div>
-
-                </th>
+                <th class="paint_status dont_have"
+                    ng-class="{active: paint.status == 1}"
+                    ng-click="paint.status = 1">Don't Have</th>
+                <th class="paint_status have"
+                    ng-class="{active: paint.status == 2}"
+                    ng-click="paint.status = 2">Have</th>
+                <th class="paint_status out_of"
+                    ng-class="{active: paint.status == 3}"
+                    ng-click="paint.status = 3">Out Of</th>
+                <th class="paint_status need"
+                    ng-class="{active: paint.status == 4}"
+                    ng-click="paint.status = 4">Need</th>
             </tr>
           </table>
         </div>

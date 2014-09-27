@@ -6,7 +6,7 @@
   padding-left: 25px;
 }
 
-.paint_status.inactive {
+.paint_status {
   opacity: 0.2;
 }
 
@@ -16,6 +16,22 @@
 
 .paint_status:hover {
   opacity: 1.0;
+}
+
+.dont_have {
+  background-color: gray;
+}
+
+.have {
+  background-color: green;
+}
+
+.need {
+  background-color: red;
+}
+
+.out_of {
+  background-color: yellow;
 }
 
 th {
