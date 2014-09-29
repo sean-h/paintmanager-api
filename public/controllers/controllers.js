@@ -9,6 +9,8 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
         $scope.brands = data.brand;
         $scope.paint_ranges = data.paint_range;
         $scope.status_keys = data.status_key;
+        $scope.list_page = 0;
+        $scope.paints_per_page = 20;
       }).
       error(function(data, status, headers, config) {
         $scope.paints = "ERROR";

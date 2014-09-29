@@ -8,8 +8,16 @@
     <body>
       <div ng-controller="PaintsController">
         <input ng-model="query.name">
+        <select ng-model="brandFilter" ng-options="brand.name for brand in brands">
+          <option value="">-- Brand --</option>
+        </select>
+        <select ng-model="rangeFilter"
+                ng-options="range.name for range in paint_ranges | filter:{brand_id: brandFilter.id}">
+          <option value="">-- Range --</option>
+        </select>
           <table>
-            <tr ng-repeat="paint in paints| filter:query">
+            <tr ng-repeat="paint in results = (paints | filter:query | filter:{range_id:rangeFilter.id}:true)
+                           | limitTo: list_page * paints_per_page - results.length | limitTo:paints_per_page">
                 <th class="paint_color" style="background-color: {{ paint.color }}"></th>
                 <th class="paint_name">{{ paint.name }}</th>
                 <th class="paint_status dont_have"
@@ -26,6 +34,9 @@
                     ng-click="paint.status = 4">Need</th>
             </tr>
           </table>
+          <button ng-click="list_page = list_page - 1" ng-disabled="list_page === 0">Prev</button>
+          {{ list_page + 1 }}
+          <button ng-click="list_page = list_page + 1" ng-disabled="list_page >= (results.length / paints_per_page) - 1">Next</button>
         </div>
     </body>
 </html>
