@@ -15,6 +15,10 @@
                 ng-options="range.name for range in paint_ranges | filter:{brand_id: brandFilter.id}">
           <option value="">-- Range --</option>
         </select>
+        <select ng-model="statusFilter"
+                ng-options="status.name for status in status_keys">
+                <option value="">-- Status --</option>
+        </select>
         <table>
           <tr>
             <th class="table_header"></th>
@@ -24,7 +28,7 @@
             <th class="table_header">Out Of</th>
             <th class="table_header">Need</th>
           </tr>
-            <tr ng-repeat="paint in results = (paints | filter:query | filter:{brand_id:brandFilter.id}:true | filter:{range_id:rangeFilter.id}:true)
+          <tr ng-repeat="paint in results = (paints | filter:query | filter:{brand_id:brandFilter.id}:true | filter:{range_id:rangeFilter.id}:true | filter:{status:statusFilter.id}:true)
                            | limitTo: list_page * paints_per_page - results.length | limitTo:paints_per_page">
                 <th class="paint_color" style="background-color: {{ paint.color }}"></th>
                 <th class="paint_name">{{ paint.name }}</th>
