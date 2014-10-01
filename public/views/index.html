@@ -15,23 +15,31 @@
                 ng-options="range.name for range in paint_ranges | filter:{brand_id: brandFilter.id}">
           <option value="">-- Range --</option>
         </select>
-          <table>
-            <tr ng-repeat="paint in results = (paints | filter:query | filter:{range_id:rangeFilter.id}:true)
+        <table>
+          <tr>
+            <th class="table_header"></th>
+            <th class="table_header">Paint Name</th>
+            <th class="table_header">Don't Have</th>
+            <th class="table_header">Have</th>
+            <th class="table_header">Out Of</th>
+            <th class="table_header">Need</th>
+          </tr>
+            <tr ng-repeat="paint in results = (paints | filter:query | filter:{brand_id:brandFilter.id}:true | filter:{range_id:rangeFilter.id}:true)
                            | limitTo: list_page * paints_per_page - results.length | limitTo:paints_per_page">
                 <th class="paint_color" style="background-color: {{ paint.color }}"></th>
                 <th class="paint_name">{{ paint.name }}</th>
                 <th class="paint_status dont_have"
                     ng-class="{active: paint.status == 1}"
-                    ng-click="paint.status = 1">Don't Have</th>
+                    ng-click="UpdatePaintStatus(paint, 1)">Don't Have</th>
                 <th class="paint_status have"
                     ng-class="{active: paint.status == 2}"
-                    ng-click="paint.status = 2">Have</th>
+                    ng-click="UpdatePaintStatus(paint, 2)">Have</th>
                 <th class="paint_status out_of"
                     ng-class="{active: paint.status == 3}"
-                    ng-click="paint.status = 3">Out Of</th>
+                    ng-click="UpdatePaintStatus(paint, 3)">Out Of</th>
                 <th class="paint_status need"
                     ng-class="{active: paint.status == 4}"
-                    ng-click="paint.status = 4">Need</th>
+                    ng-click="UpdatePaintStatus(paint, 4)">Need</th>
             </tr>
           </table>
           <button ng-click="list_page = list_page - 1" ng-disabled="list_page === 0">Prev</button>
