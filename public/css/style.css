@@ -1,5 +1,6 @@
 .paint_name {
   color: #fff;
+  width: 15em;
 }
 
 .paint_color {
@@ -20,18 +21,22 @@
 
 .dont_have {
   background-color: gray;
+  width: 6em;
 }
 
 .have {
   background-color: green;
+  width: 6em;
 }
 
 .need {
   background-color: red;
+  width: 6em;
 }
 
 .out_of {
   background-color: yellow;
+  width: 6em;
 }
 
 th {
