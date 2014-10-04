@@ -1,6 +1,18 @@
 'use strict';
 
-var myApp = angular.module('myApp', []);
+var myApp = angular.module('myApp', ['ngRoute']);
+
+myApp.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/paints', {
+        templateUrl: 'templates/paints.html',
+        controller: 'PaintsController'
+      }).
+      otherwise({
+          redirectTo: '/paints'
+      });
+  }]);
 
 myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http) {
     $http({method: 'GET', url: '/sync.json'}).
