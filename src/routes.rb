@@ -15,7 +15,7 @@ class Routes < Sinatra::Base
   end
 
   get '/' do
-    send_file File.join(settings.public_folder, 'views/index.html')
+    send_file File.join(settings.public_folder, 'index.html')
   end
 
   # @method /brands
