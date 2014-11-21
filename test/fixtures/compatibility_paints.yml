@@ -1,0 +1,9 @@
+red1:
+  id: 1
+  paint_id: 1
+  compatibility_groups_id: 1
+
+red2:
+  id: 2
+  paint_id: 3
+  compatibility_groups_id: 1

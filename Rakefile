@@ -17,6 +17,15 @@ namespace :db do
   end
 end
 
+namespace :db do
+  desc 'Rollback the database'
+  task :rollback, [:env] => :environment do |t, args|
+    ActiveRecord::Base.logger = Logger.new(STDOUT)
+    ActiveRecord::Migration.verbose = true
+    ActiveRecord::Migrator.rollback('db/migrate', 1)
+  end
+end
+
 Rake::TestTask.new do |t|
   Rake::Task[:environment].invoke('test')
   fixtures = ['brands', 'ranges', 'paints']

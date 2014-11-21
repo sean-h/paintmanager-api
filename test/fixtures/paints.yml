@@ -9,3 +9,9 @@ blue:
   name: Blue
   color: '#0000FF'
   range_id: 2
+
+fire_red:
+  id: 3
+  name: Fire Red
+  color: '#FF0000'
+  range_id: 2
