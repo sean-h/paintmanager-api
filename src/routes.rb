@@ -163,6 +163,10 @@ class Routes < Sinatra::Base
     return PaintStatus.all.to_json
   end
 
+  get '/paint_statuses/:id.json' do |id|
+    return PaintStatus.where(paint_id: id).to_json
+  end
+
   # @method /paint_statuses
   # @param paint_id [Integer] The id of the Paint.
   # @param user_id [Integer] The id of the User.
@@ -175,7 +179,7 @@ class Routes < Sinatra::Base
     return status.to_json
   end
 
-  # @method /sync
+  # @method /sync.json
   # Returns all Brands, PaintRanges, Paints and StatusKeys.
   get '/sync.json' do
     brands = Brand.all
@@ -188,6 +192,16 @@ class Routes < Sinatra::Base
     data = { brand: brands, paint_range: ranges,
              paint: paints, status_key: status_keys }
     return data.to_json
+  end
+
+  # @method /sync.json
+  post '/sync.json' do
+    params['paint'].each do |paint|
+      status = PaintStatus.where(paint_id: paint['id'], user_id: 1)
+        .first_or_create
+      status.status = paint['status']
+      status.save
+    end
   end
 
   if app_file == $PROGRAM_NAME
