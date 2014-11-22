@@ -1,0 +1,14 @@
+<table>
+  <tr>
+    <th class="table_header" ng-repeat="range in paint_ranges">{{ range.name }}</th>
+  </tr>
+  <tr ng-repeat="compat in compatibility_groups">
+    <th ng-repeat="range in paint_ranges">
+      <select ng-model="compatibility_option"
+              ng-options="paint.name for paint in paints | filter:{range_id:range.id}:true | orderBy:'name'">
+        <option value="">--- Paint ---</option>
+      </select>
+    </th> 
+  </tr>
+</table>
+<button ng-click="NewCompatibilityGroup()">New Group</button>

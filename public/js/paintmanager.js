@@ -9,6 +9,10 @@ myApp.config(['$routeProvider',
         templateUrl: 'templates/paints.html',
         controller: 'PaintsController'
       }).
+      when('/compatibility', {
+        templateUrl: 'templates/compatibility.html',
+        controller: 'PaintsController'
+      }).
       otherwise({
           redirectTo: '/paints'
       });
@@ -21,6 +25,7 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
         $scope.brands = data.brand;
         $scope.paint_ranges = data.paint_range;
         $scope.status_keys = data.status_key;
+        $scope.compatibility_groups = [];
 
         var range_brand_hash = {};
         for (var i = 0; i < $scope.paint_ranges.length; i++) {
@@ -55,5 +60,13 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
                 paint.status = old_status;
                 window.alert("Error Connecting to Server");
             });
+    };
+
+    $scope.NewCompatibilityGroup = function() {
+        $scope.compatibility_groups.push({id: 1});
+    };
+
+    $scope.UpdateCompatibilityGroup = function(compatibility_group_id, paint_id) {
+
     };
 }]);
