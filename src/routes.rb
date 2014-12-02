@@ -154,7 +154,8 @@ class Routes < Sinatra::Base
   # Returns the new User.
   post '/user.json' do
     user = User.create(email: params[:email], password: params[:password])
-    return user.to_json
+    return user.to_json if user.valid?
+    return JSON({ errors: user.errors.to_a })
   end
 
   # @method /paint_statuses

@@ -1,3 +1,4 @@
+require 'bcrypt'
 require 'rake/testtask'
 require 'sinatra/activerecord'
 require 'active_record/fixtures'
