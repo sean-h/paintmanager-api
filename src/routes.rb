@@ -148,11 +148,11 @@ class Routes < Sinatra::Base
     return status_key.to_json
   end
 
-  # @method /user
+  # @method /user.json
   # @param email [String] The email of the new user.
   # @param password [String] The password of the new user.
   # Returns the new User.
-  post '/user' do
+  post '/user.json' do
     user = User.create(email: params[:email], password: params[:password])
     return user.to_json
   end
@@ -209,6 +209,9 @@ class Routes < Sinatra::Base
     ActiveRecord::Base.establish_connection(db_config['development'])
     set :bind, '0.0.0.0'
     set :public_folder, 'public'
+    set :raise_errors, true
+    set :dump_errors, false
+    set :show_exceptions, false
     run!
   else
     db_config = YAML.load(File.open('db/config.yml'))
