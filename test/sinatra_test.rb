@@ -9,6 +9,7 @@ class SinatraTest < Minitest::Test
 
   # Returns the PaintManager app
   def app
+    I18n.enforce_available_locales = false
     Routes
   end
 end
