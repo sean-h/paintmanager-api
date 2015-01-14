@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
+gem 'sinatra', git: 'https://github.com/sinatra/sinatra.git'
 gem 'yard'
 gem 'sqlite3'
 gem 'json'
