@@ -29,7 +29,7 @@ end
 
 Rake::TestTask.new do |t|
   Rake::Task[:environment].invoke('test')
-  fixtures = ['brands', 'ranges', 'paints', 'users']
+  fixtures = ['brands', 'ranges', 'paints', 'users', 'user_tokens']
   ActiveRecord::FixtureSet.create_fixtures('test/fixtures', fixtures)
   t.libs << 'test'
   t.test_files = FileList['test/test_*.rb']
