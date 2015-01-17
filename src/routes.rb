@@ -155,7 +155,7 @@ class Routes < Sinatra::Base
   post '/user.json' do
     user = User.create(email: params[:email], password: params[:password])
     return user.to_json if user.valid?
-    return JSON({ errors: user.errors.to_a })
+    return JSON(errors: user.errors.to_a)
   end
 
   # @method /paint_statuses
@@ -174,7 +174,7 @@ class Routes < Sinatra::Base
   # Returns the PaintStatus for the given Paint and User.
   post '/paint_statuses' do
     status = PaintStatus.where(paint_id: params['paint_id'], user_id: 1)
-      .first_or_create
+             .first_or_create
     status.status = params['status']
     status.save
     return status.to_json
@@ -187,8 +187,8 @@ class Routes < Sinatra::Base
     ranges = PaintRange.all
     paints = Paint.select('paints.*,
                            COALESCE(paint_statuses.status, 1) AS status')
-      .joins('LEFT OUTER JOIN paint_statuses
-              ON paints.id = paint_statuses.paint_id')
+             .joins('LEFT OUTER JOIN paint_statuses
+                     ON paints.id = paint_statuses.paint_id')
     status_keys = StatusKey.all
     data = { brand: brands, paint_range: ranges,
              paint: paints, status_key: status_keys }
@@ -199,7 +199,7 @@ class Routes < Sinatra::Base
   post '/sync.json' do
     params['paint'].each do |paint|
       status = PaintStatus.where(paint_id: paint['id'], user_id: 1)
-        .first_or_create
+               .first_or_create
       status.status = paint['status']
       status.save
     end
