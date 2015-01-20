@@ -2,8 +2,12 @@ require_relative './sinatra_test'
 
 # Tests the User routes
 class TestUser < SinatraTest
-  @email_blank = "Email can't be blank"
-  @password_blank = "Password can't be blank"
+
+  def initialize(name)
+    super(name)
+    @email_blank = "Email can't be blank"
+    @password_blank = "Password can't be blank"
+  end
 
   def test_create_user
     user_data = { email: 'test@example.com',
@@ -17,10 +21,10 @@ class TestUser < SinatraTest
     post 'user.json', user_data
     data = JSON.parse last_response.body
     assert(data.key?('errors'), 'Response does not contain an "errors" key')
-    assert(data['errors'].include?(@@email_blank),
-           "Missing error: #{@@email_blank}")
-    assert(data['errors'].include?(@@password_blank),
-           "Missing error: #{@@password_blank}")
+    assert(data['errors'].include?(@email_blank),
+           "Missing error: #{@email_blank}")
+    assert(data['errors'].include?(@password_blank),
+           "Missing error: #{@password_blank}")
   end
 
   # Tests that duplicate accounts with the same email address cannot be created
