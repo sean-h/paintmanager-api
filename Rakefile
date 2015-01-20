@@ -27,10 +27,20 @@ namespace :db do
   end
 end
 
+namespace :db do
+  namespace :fixtures do
+    desc 'Load the database fixtures'
+    task :load, [:end] => :environment do |t, args|
+      fixtures = ['brands', 'ranges', 'paints', 'users', 'user_tokens',
+                  'compatibility_groups', 'compatibility_paints']
+      ActiveRecord::FixtureSet.create_fixtures('test/fixtures', fixtures)
+    end
+  end
+end
+
 Rake::TestTask.new do |t|
   Rake::Task[:environment].invoke('test')
-  fixtures = ['brands', 'ranges', 'paints', 'users', 'user_tokens']
-  ActiveRecord::FixtureSet.create_fixtures('test/fixtures', fixtures)
+  Rake::Task['db:fixtures:load'].invoke('test')
   t.libs << 'test'
   t.test_files = FileList['test/test_*.rb']
   #Allow the environment to be set for other tasks
