@@ -70,3 +70,10 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
 
     };
 }]);
+
+myApp.directive('paintListing', function() {
+  return {
+    restrict: 'A',
+    templateUrl: 'templates/paint-listing.html',
+  };
+});
