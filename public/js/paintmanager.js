@@ -13,6 +13,10 @@ myApp.config(['$routeProvider',
         templateUrl: 'templates/compatibility.html',
         controller: 'PaintsController'
       }).
+      when('/login', {
+        templateUrl: 'templates/login.html',
+        controller: 'LoginController'
+      }).
       otherwise({
           redirectTo: '/paints'
       });
@@ -69,6 +73,10 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
     $scope.UpdateCompatibilityGroup = function(compatibility_group_id, paint_id) {
 
     };
+}]);
+
+myApp.controller('LoginController', [function() {
+
 }]);
 
 myApp.directive('paintListing', function() {
