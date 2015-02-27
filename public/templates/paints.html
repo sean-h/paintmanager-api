@@ -26,14 +26,6 @@
     </div>
   </div>
   <table>
-    <tr>
-      <th class="table_header"></th>
-      <th class="table_header">Paint Name</th>
-      <th class="table_header">Don't Have</th>
-      <th class="table_header">Have</th>
-      <th class="table_header">Out Of</th>
-      <th class="table_header">Need</th>
-    </tr>
       <tr paint-listing ng-repeat="paint in results = (paints |
                                                        filter:query |
                                                        filter:{brand_id:brandFilter.id}:true |
