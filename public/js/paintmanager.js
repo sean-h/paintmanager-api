@@ -17,6 +17,10 @@ myApp.config(['$routeProvider',
         templateUrl: 'templates/login.html',
         controller: 'LoginController'
       }).
+      when('/signup', {
+        templateUrl: 'templates/signup.html',
+        controller: 'SignupController'
+      }).
       otherwise({
           redirectTo: '/paints'
       });
@@ -78,6 +82,24 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
 myApp.controller('LoginController', ['$http', function($http) {
   this.login = function(emailAddress, password) {
     $http.post('/login', {email: emailAddress, password: password}).
+      success(function(data, status, headers, config) {
+
+      }).
+      error(function(data, status, headers, config) {
+
+      });
+  };
+}]);
+
+myApp.controller('SignupController', ['$http', function($http) {
+  this.signup = function(emailAddress, password, confirmPassword) {
+    console.log(emailAddress)
+    console.log(password)
+    var postData = 'email=' + emailAddress + '&password=' + password;
+    $http({method: 'POST',
+           url: '/user.json',
+           data: postData,
+           headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
       success(function(data, status, headers, config) {
 
       }).
