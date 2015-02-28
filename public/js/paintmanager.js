@@ -75,8 +75,16 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
     };
 }]);
 
-myApp.controller('LoginController', [function() {
+myApp.controller('LoginController', ['$http', function($http) {
+  this.login = function(emailAddress, password) {
+    $http.post('/login', {email: emailAddress, password: password}).
+      success(function(data, status, headers, config) {
 
+      }).
+      error(function(data, status, headers, config) {
+
+      });
+  };
 }]);
 
 myApp.directive('paintListing', function() {

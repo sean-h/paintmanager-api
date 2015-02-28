@@ -10,6 +10,12 @@ require_relative './paint_status'
 
 # Entry point of the application.
 class Routes < Sinatra::Base
+  enable :sessions
+
+  "before do
+    @user = User.get(session[:user_id])
+  end"
+
   after do
     ActiveRecord::Base.connection.close
   end
@@ -203,6 +209,11 @@ class Routes < Sinatra::Base
       status.status = paint['status']
       status.save
     end
+  end
+
+  post '/login' do
+    user = User.find_by(email: params[:email]).try(:authenticate, params[:password])
+    session[:user_id] = user.id unless user.nil?
   end
 
   if app_file == $PROGRAM_NAME
