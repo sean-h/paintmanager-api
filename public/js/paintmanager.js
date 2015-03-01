@@ -22,7 +22,7 @@ myApp.config(['$routeProvider',
         controller: 'SignupController'
       }).
       otherwise({
-          redirectTo: '/paints'
+          redirectTo: '/login'
       });
   }]);
 
@@ -81,7 +81,11 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
 
 myApp.controller('LoginController', ['$http', function($http) {
   this.login = function(emailAddress, password) {
-    $http.post('/login', {email: emailAddress, password: password}).
+    var postData = 'email=' + emailAddress + '&password=' + password;
+    $http({method: 'POST',
+           url: '/login',
+           data: postData,
+           headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
       success(function(data, status, headers, config) {
 
       }).
