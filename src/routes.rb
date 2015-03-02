@@ -1,4 +1,5 @@
 require 'json'
+require 'securerandom'
 require 'sinatra/activerecord'
 require 'sinatra/base'
 require_relative './brand'
@@ -10,11 +11,19 @@ require_relative './paint_status'
 
 # Entry point of the application.
 class Routes < Sinatra::Base
-  enable :sessions
+  auth_tokens = {}
 
-  "before do
-    @user = User.get(session[:user_id])
-  end"
+  before do
+    @user = User.where(id: auth_tokens[request.env['HTTP_AUTHORIZATION']]).first
+  end
+
+  register do
+    def auth
+      condition do
+        "You must be logged in to access this page" if @user.nil?
+      end
+    end
+  end
 
   after do
     ActiveRecord::Base.connection.close
@@ -213,7 +222,12 @@ class Routes < Sinatra::Base
 
   post '/login' do
     user = User.find_by(email: params[:email]).try(:authenticate, params[:password])
-    session[:user_id] = user.id unless user.nil?
+    auth = SecureRandom.base64
+    auth_tokens[auth] = user.id
+    unless user.nil?
+      return { auth_token: auth }.to_json
+    end
+    return { error: "Failed to login" }.to_json
   end
 
   if app_file == $PROGRAM_NAME
