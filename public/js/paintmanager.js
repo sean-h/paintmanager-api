@@ -79,7 +79,7 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
     };
 }]);
 
-myApp.controller('LoginController', ['$http', function($http) {
+myApp.controller('LoginController', ['$http', '$window', function($http, $window) {
   this.login = function(emailAddress, password) {
     var postData = 'email=' + emailAddress + '&password=' + password;
     $http({method: 'POST',
@@ -87,7 +87,7 @@ myApp.controller('LoginController', ['$http', function($http) {
            data: postData,
            headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
       success(function(data, status, headers, config) {
-
+        $window.sessionStorage.token = data.auth_token;
       }).
       error(function(data, status, headers, config) {
 
@@ -112,6 +112,22 @@ myApp.controller('SignupController', ['$http', function($http) {
       });
   };
 }]);
+
+myApp.factory('authInterceptor', function($window) {
+  return {
+    request: function(config) {
+      config.headers = config.headers || {};
+      if ($window.sessionStorage.token) {
+        config.headers.Authorization = $window.sessionStorage.token;
+      }
+      return config;
+    }
+  };
+});
+
+myApp.config(function($httpProvider) {
+  $httpProvider.interceptors.push('authInterceptor');
+});
 
 myApp.directive('paintListing', function() {
   return {
