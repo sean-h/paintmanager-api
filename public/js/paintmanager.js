@@ -79,7 +79,7 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
     };
 }]);
 
-myApp.controller('LoginController', ['$http', '$window', function($http, $window) {
+myApp.controller('LoginController', ['$http', '$window', '$location', function($http, $window, $location) {
   this.login = function(emailAddress, password) {
     var postData = 'email=' + emailAddress + '&password=' + password;
     $http({method: 'POST',
@@ -88,6 +88,7 @@ myApp.controller('LoginController', ['$http', '$window', function($http, $window
            headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
       success(function(data, status, headers, config) {
         $window.sessionStorage.token = data.auth_token;
+        $location.path('paints');
       }).
       error(function(data, status, headers, config) {
 
