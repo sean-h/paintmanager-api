@@ -39,6 +39,7 @@ namespace :db do
 end
 
 Rake::TestTask.new do |t|
+  ENV['ENV'] = 'test'
   Rake::Task[:environment].invoke('test')
   Rake::Task['db:fixtures:load'].invoke('test')
   t.libs << 'test'
