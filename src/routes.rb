@@ -223,13 +223,15 @@ class Routes < Sinatra::Base
   end
 
   post '/login' do
-    user = User.find_by(email: params[:email]).try(:authenticate, params[:password])
-    auth = SecureRandom.base64
-    auth_tokens[auth] = user.id
-    unless user.nil?
-      return { auth_token: auth }.to_json
+    begin
+      user = User.find_by(email: params[:email]).try(:authenticate, params[:password])
+      auth = SecureRandom.base64
+      auth_tokens[auth] = user.id
+      return { auth_token: auth }.to_json unless user.nil?
+    rescue
+      return { error: "Failed to login" }.to_json
     end
-    return { error: "Failed to login" }.to_json
+    { error: "Failed to login" }.to_json
   end
 
   if app_file == $PROGRAM_NAME
