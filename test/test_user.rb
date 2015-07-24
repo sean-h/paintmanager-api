@@ -36,4 +36,13 @@ class TestUser < SinatraTest
     data = JSON.parse last_response.body
     assert(data.key?('errors'), 'Response does not contain an "errors" key')
   end
+
+  def test_login
+    user_data = { email: 'user1@example.com',
+                  password: 'password' }
+    post 'login', user_data
+    assert last_response.ok?
+    data = JSON.parse last_response.body
+    assert(data.key?('auth_token'), 'Response does not contain an auth token')
+  end
 end
