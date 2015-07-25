@@ -42,14 +42,14 @@ class Routes < Sinatra::Base
   # @param name [String] The name of the Brand to create.
   # Returns the created Brand.
   post '/brands' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     brand = Brand.create(name: params[:name])
     return brand.to_json
   end
 
   # @method /brands.json
   post '/brands.json' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     return 'Missing json data' if params[:json].nil?
 
     json = JSON.parse(params[:json])
@@ -78,7 +78,7 @@ class Routes < Sinatra::Base
   # @param brand_id [Integer] The id of the brand the new PaintRange belongs to
   # Returns the created PaintRange.
   post '/ranges' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     range = PaintRange.create(name: params[:name],
                               brand_id: params[:brand_id])
     return range.to_json
@@ -86,7 +86,7 @@ class Routes < Sinatra::Base
 
   # @method /ranges.json
   post '/ranges.json' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     return 'Missing json data' if params[:json].nil?
 
     json = JSON.parse(params[:json])
@@ -117,7 +117,7 @@ class Routes < Sinatra::Base
   # @param range_id [Integer] The id of the PaintRange the Paint belongs to.
   # Returns the new Paint.
   post '/paints' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     paint = Paint.create(name: params[:name],
                          color: params[:color],
                          range_id: params[:range_id])
@@ -126,7 +126,7 @@ class Routes < Sinatra::Base
 
   # @method /paints.json
   post '/paints.json' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     return 'Missing json data' if params[:json].nil?
 
     json = JSON.parse(params[:json])
@@ -157,7 +157,7 @@ class Routes < Sinatra::Base
   # @param color [String] The color of the StatusKey to create.
   # Returns the newly created StatusKey.
   post '/status_keys' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     status_key = StatusKey.create(name: params[:name], color: params[:color])
     return status_key.to_json
   end
@@ -187,7 +187,7 @@ class Routes < Sinatra::Base
   # @param user_id [Integer] The id of the User.
   # Returns the PaintStatus for the given Paint and User.
   post '/paint_statuses' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     status = PaintStatus.where(paint_id: params['paint_id'], user_id: 1)
              .first_or_create
     status.status = params['status']
@@ -198,7 +198,7 @@ class Routes < Sinatra::Base
   # @method /sync.json
   # Returns all Brands, PaintRanges, Paints and StatusKeys.
   get '/sync.json' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     brands = Brand.all
     ranges = PaintRange.all
     paints = Paint.select('paints.*,
@@ -213,7 +213,7 @@ class Routes < Sinatra::Base
 
   # @method /sync.json
   post '/sync.json' do
-    return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
+    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     params['paint'].each do |paint|
       status = PaintStatus.where(paint_id: paint['id'], user_id: @user.id)
                .first_or_create
@@ -229,9 +229,9 @@ class Routes < Sinatra::Base
       auth_tokens[auth] = user.id
       return { auth_token: auth }.to_json unless user.nil?
     rescue
-      return { error: "Failed to login" }.to_json
+      return { error: 'Failed to login' }.to_json
     end
-    { error: "Failed to login" }.to_json
+    { error: 'Failed to login' }.to_json
   end
 
   if app_file == $PROGRAM_NAME
