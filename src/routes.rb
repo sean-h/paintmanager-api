@@ -214,17 +214,22 @@ class Routes < Sinatra::Base
   # @method /sync.json
   post '/sync.json' do
     return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
-    params['paint'].each do |paint|
-      status = PaintStatus.where(paint_id: paint['id'], user_id: @user.id)
-               .first_or_create
-      status.status = paint['status']
-      status.save
+    json = JSON params['JSON']
+    unless json['paints'].nil?
+      json['paints'].each do |paint|
+        status = PaintStatus.where(paint_id: paint['id'], user_id: @user.id)
+                 .first_or_create
+        status.status = paint['status']
+        status.save
+        p paint
+        p status
+      end
     end
     paints = Paint.select('paints.id, paints.name, paints.color, paints.range_id,
                            COALESCE(paint_statuses.status, 1) AS status')
              .joins('JOIN paint_statuses
                      ON paints.id = paint_statuses.paint_id')
-             .where('paint_statuses.updated_at > ? AND user_id = ?', params['last_sync'], @user.id)
+             .where('paint_statuses.updated_at > ? AND user_id = ?', json['last_sync'], @user.id)
     return { paint: paints }.to_json
   end
 
