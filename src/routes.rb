@@ -1,3 +1,4 @@
+require 'date'
 require 'json'
 require 'securerandom'
 require 'sinatra/activerecord'
@@ -225,12 +226,18 @@ class Routes < Sinatra::Base
         p status
       end
     end
+    last_sync = DateTime.strptime(json['last_sync'].to_s, '%Q')
+    last_sync_formatted = last_sync.strftime('%Y-%m-%d %H:%M:%S.%L')
+
+    brands = Brand.where('updated_at > ?', last_sync_formatted)
+    ranges = PaintRange.where('updated_at > ?', last_sync_formatted)
     paints = Paint.select('paints.id, paints.name, paints.color, paints.range_id,
                            COALESCE(paint_statuses.status, 1) AS status')
-             .joins('JOIN paint_statuses
+             .joins('LEFT OUTER JOIN paint_statuses
                      ON paints.id = paint_statuses.paint_id')
-             .where('paint_statuses.updated_at > ? AND user_id = ?', json['last_sync'], @user.id)
-    return { paint: paints }.to_json
+             .where('paint_statuses.updated_at > ? AND user_id = ?', last_sync_formatted, @user.id)
+    data = { brand: brands, paint_range: ranges, paint: paints }
+    return data.to_json
   end
 
   post '/login' do
