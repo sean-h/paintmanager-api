@@ -215,7 +215,7 @@ class Routes < Sinatra::Base
   post '/sync.json' do
     return { auth_error: "You must be logged in to access this page" }.to_json if @user.nil?
     params['paint'].each do |paint|
-      status = PaintStatus.where(paint_id: paint['id'], user_id: 1)
+      status = PaintStatus.where(paint_id: paint['id'], user_id: @user.id)
                .first_or_create
       status.status = paint['status']
       status.save
