@@ -21,6 +21,10 @@ myApp.config(['$routeProvider',
         templateUrl: 'templates/signup.html',
         controller: 'SignupController'
       }).
+      when('/logout', {
+        templateUrl: 'template/login.html',
+        controller: 'LoginController'
+      }).
       otherwise({
           redirectTo: '/login'
       });
@@ -93,6 +97,13 @@ myApp.controller('LoginController', ['$http', '$window', '$location', function($
       error(function(data, status, headers, config) {
 
       });
+  };
+  this.loggedIn = function() {
+    return !!$window.sessionStorage.token;
+  };
+  this.logout = function() {
+    delete $window.sessionStorage.token;
+    $location.path('/');
   };
 }]);
 

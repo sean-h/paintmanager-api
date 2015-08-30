@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
     </head>
     <body>
-    <div class="navbar navbar-default navbar-static-top">
+    <div ng-controller="LoginController as LoginCtrl" class="navbar navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand">Paintmanager</a>
@@ -18,13 +18,18 @@
             <span class="icon-bar"></span>
           </button>
         </div>
-        <ul class="nav navbar-nav collapse navbar-collapse">
+        <ul ng-if="LoginCtrl.loggedIn()" class="nav navbar-nav collapse navbar-collapse">
           <li class="presentation"><a href="#/paints">Paints</a></li>
           <li class="presentation"><a href="#/compatibility">Compatibility</a></li>
         </ul>
-        <ul class="nav navbar-nav nav-pills navbar-right collapse navbar-collapse">
+        <ul ng-if="!LoginCtrl.loggedIn()"
+          class="nav navbar-nav nav-pills navbar-right collapse navbar-collapse">
           <li class="presentation"><a href="#/login">Login</a></li>
           <li class="presentation"><a href="#/signup">Sign Up</a></li>
+        </ul>
+        <ul ng-if="LoginCtrl.loggedIn()"
+          class="nav navbar-nav nav-pills navbar-right collapse navbar-collapse">
+          <li class="presentation"><a ng-click="LoginCtrl.logout()">Logout</a></li>
         </ul>
       </div>
     </div>
