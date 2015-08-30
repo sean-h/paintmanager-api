@@ -1,3 +1,4 @@
+require 'bcrypt'
 require 'date'
 require 'json'
 require 'securerandom'
