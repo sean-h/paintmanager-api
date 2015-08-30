@@ -6,7 +6,8 @@ require 'active_record/fixtures'
 task :environment, :env do |t, args|
   desc 'Setup server environment'
   db_config = YAML::load(File.open('db/config.yml'))
-  ActiveRecord::Base.establish_connection(db_config[args[:env]])
+  env = args[:env] || ENV['ENV'] || 'development'
+  ActiveRecord::Base.establish_connection(db_config[env])
 end
 
 namespace :db do
@@ -38,12 +39,15 @@ namespace :db do
   end
 end
 
-Rake::TestTask.new do |t|
-  ENV['ENV'] = 'test'
-  Rake::Task[:environment].invoke('test')
-  Rake::Task['db:fixtures:load'].invoke('test')
-  t.libs << 'test'
-  t.test_files = FileList['test/test_*.rb']
-  #Allow the environment to be set for other tasks
-  Rake::Task[:environment].reenable
+task :test do
+  Rake::TestTask.new do |t|
+    ENV['ENV'] = 'test'
+    Rake::Task[:environment].invoke('test')
+    Rake::Task['db:migrate'].invoke('test')
+    Rake::Task['db:fixtures:load'].invoke('test')
+    t.libs << 'test'
+    t.test_files = FileList['test/test_*.rb']
+    #Allow the environment to be set for other tasks
+    Rake::Task[:environment].reenable
+  end
 end
