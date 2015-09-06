@@ -255,7 +255,7 @@ class Routes < Sinatra::Base
 
   if app_file == $PROGRAM_NAME
     db_config = YAML.load(File.open('db/config.yml'))
-    environment = ENV['ENV']
+    environment = ENV['ENV'] || 'development'
     ActiveRecord::Base.establish_connection(db_config[environment])
     set :bind, '0.0.0.0'
     set :public_folder, 'public'
@@ -265,7 +265,7 @@ class Routes < Sinatra::Base
     run!
   else
     db_config = YAML.load(File.open('db/config.yml'))
-    environment = ENV['ENV']
+    environment = ENV['ENV'] || 'development'
     ActiveRecord::Base.establish_connection(db_config[environment])
   end
 end
