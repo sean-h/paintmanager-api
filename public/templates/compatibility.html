@@ -1,14 +1,20 @@
 <table>
   <tr>
+    <th class="table_header">ID</th>
     <th class="table_header" ng-repeat="range in paint_ranges">{{ range.name }}</th>
   </tr>
   <tr ng-repeat="compat in compatibility_groups">
+    <th>
+      {{compat.id}}
+    </th>
     <th ng-repeat="range in paint_ranges">
       <select ng-model="compatibility_option"
-              ng-options="paint.name for paint in paints | filter:{range_id:range.id}:true | orderBy:'name'">
+              ng-init="compatibility_option = compat.range[range.id]"
+              ng-options="paint.name for paint in paints | filter:{range_id:range.id}:true | orderBy:'name'"
+              ng-change="UpdateCompatibilityGroup(compat, compatibility_option)">
         <option value="">--- Paint ---</option>
       </select>
     </th> 
   </tr>
 </table>
-<button ng-click="NewCompatibilityGroup()">New Group</button>
+<button class="btn btn-primary" ng-click="NewCompatibilityGroup()">New Group</button>

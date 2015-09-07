@@ -37,7 +37,7 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
         $scope.brands = data.brand;
         $scope.paint_ranges = data.paint_range;
         $scope.status_keys = data.status_key;
-        $scope.compatibility_groups = [];
+        $scope.compatibility_groups = data.compatibility_groups;
 
         var range_brand_hash = {};
         for (var i = 0; i < $scope.paint_ranges.length; i++) {
@@ -47,6 +47,18 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
         for (var i = 0; i < $scope.paints.length; i++) {
             var range_id = $scope.paints[i].range_id;
             $scope.paints[i].brand_id = range_brand_hash[range_id]
+        }
+
+        for (var i = 0; i < $scope.compatibility_groups.length; i++) {
+          var group = $scope.compatibility_groups[i];
+          group.range = [];
+          var paints = $scope.compatibility_groups[i].paint_id;
+          if (paints) {
+            for (var p = 0; p < paints.length; p++) {
+              var paint = $scope.GetPaint(paints[p]);
+              group.range[paint.range_id] = paint;
+            }
+          }
         }
 
         $scope.list_page = 0;
@@ -74,12 +86,32 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
             });
     };
 
+    $scope.GetPaint = function(id) {
+      for (var i = 0; i < $scope.paints.length; i++) {
+        if ($scope.paints[i].id === id) {
+          return $scope.paints[i];
+        }
+      }
+      return null;
+    }
+
     $scope.NewCompatibilityGroup = function() {
-        $scope.compatibility_groups.push({id: 1});
+        $scope.compatibility_groups.push({id: 0});
     };
 
-    $scope.UpdateCompatibilityGroup = function(compatibility_group_id, paint_id) {
+    $scope.UpdateCompatibilityGroup = function(group, paint) {
+      var post_data = "json=" + JSON.stringify({id: group.id, paint_id: [paint.id]});
 
+      $http({method: 'POST',
+             url: '/paint_groups.json',
+             data: post_data,
+             headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
+        success(function(data, status, headers, config) {
+          group.id = data['id'];
+        }).
+        error(function(data, status, headers, config) {
+
+        });
     };
 }]);
 
@@ -109,8 +141,6 @@ myApp.controller('LoginController', ['$http', '$window', '$location', function($
 
 myApp.controller('SignupController', ['$http', function($http) {
   this.signup = function(emailAddress, password, confirmPassword) {
-    console.log(emailAddress)
-    console.log(password)
     var postData = 'email=' + emailAddress + '&password=' + password;
     $http({method: 'POST',
            url: '/user.json',

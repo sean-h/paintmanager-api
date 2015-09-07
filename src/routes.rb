@@ -5,6 +5,8 @@ require 'securerandom'
 require 'sinatra/activerecord'
 require 'sinatra/base'
 require_relative './brand'
+require_relative './compatibility_group'
+require_relative './compatibility_paint'
 require_relative './paint'
 require_relative './paint_range'
 require_relative './user'
@@ -141,6 +143,39 @@ class Routes < Sinatra::Base
     end
   end
 
+  # @method /paint_groups.json
+  get '/paint_groups.json' do
+    #return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
+    results = CompatibilityGroup
+             .select('compatibility_groups.id, group_concat(compatibility_paints.paint_id) as "paint_id"')
+             .joins('LEFT OUTER JOIN compatibility_paints ON compatibility_groups.id = compatibility_groups_id')
+             .group('compatibility_groups.id')
+             .as_json
+    results.each do |result|
+      result['paint_id'] = result['paint_id'].split(',').map(&:to_i)
+    end
+
+    results.to_json
+  end
+
+  # @method /paint_groups
+  post '/paint_groups.json' do
+    json_params = JSON params[:json]
+
+    if json_params['id'] == 0
+      group = CompatibilityGroup.create
+    else
+      group = CompatibilityGroup.find(json_params['id'])
+    end
+    
+    json_params['paint_id'].each do |paint_id|
+      CompatibilityPaint.create(paint_id: paint_id,
+                                compatibility_groups_id: group.id) 
+    end
+
+    group.to_json
+  end
+
   # @method /status_key
   # Returns all StatusKeys
   get '/status_keys.json' do
@@ -200,7 +235,7 @@ class Routes < Sinatra::Base
   # @method /sync.json
   # Returns all Brands, PaintRanges, Paints and StatusKeys.
   get '/sync.json' do
-    return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
+    #return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     brands = Brand.all
     ranges = PaintRange.all
     paints = Paint.select('paints.*,
@@ -208,8 +243,18 @@ class Routes < Sinatra::Base
              .joins('LEFT OUTER JOIN paint_statuses
                      ON paints.id = paint_statuses.paint_id')
     status_keys = StatusKey.all
+    groups = CompatibilityGroup
+             .select('compatibility_groups.id, group_concat(compatibility_paints.paint_id) as "paint_id"')
+             .joins('LEFT OUTER JOIN compatibility_paints ON compatibility_groups.id = compatibility_groups_id')
+             .group('compatibility_groups.id')
+             .as_json
+    p groups
+    groups.each do |result|
+      result['paint_id'] = result['paint_id'].split(',').map(&:to_i) unless result['paint_id'].nil?
+    end
     data = { brand: brands, paint_range: ranges,
-             paint: paints, status_key: status_keys }
+             paint: paints, status_key: status_keys,
+             compatibility_groups: groups }
     return data.to_json
   end
 
