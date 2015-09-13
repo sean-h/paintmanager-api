@@ -18,10 +18,10 @@ class Routes < Sinatra::Base
   auth_tokens = {}
 
   configure do
-    p 'Config'
     db_config = YAML.load(File.open('db/config.yml'))
-    environment = ENV['ENV'] || 'development'
-    ActiveRecord::Base.establish_connection(db_config[environment])
+    environment = ENV['RACK_ENV'] || 'development'
+    db = ENV['DATABASE_URL'] || db_config[environment]
+    ActiveRecord::Base.establish_connection(db)
     set :public_folder, 'public'
   end
 
@@ -307,7 +307,7 @@ class Routes < Sinatra::Base
   end
 
   def group_concat(column)
-    return "array_to_string(array_agg(#{column}), ',')" if ENV['ENV'] == 'production'
+    return "array_to_string(array_agg(#{column}), ',')" if ENV['RACK_ENV'] == 'production'
     "group_concat(#{column})"
   end
 

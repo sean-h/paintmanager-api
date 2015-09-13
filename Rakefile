@@ -6,7 +6,7 @@ require 'active_record/fixtures'
 task :environment, :env do |t, args|
   desc 'Setup server environment'
   db_config = YAML::load(File.open('db/config.yml'))
-  env = args[:env] || ENV['ENV'] || 'development'
+  env = args[:env] || ENV['RACK_ENV'] || 'development'
   ActiveRecord::Base.establish_connection(db_config[env])
 end
 
