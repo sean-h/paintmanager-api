@@ -17,6 +17,14 @@ require_relative './paint_status'
 class Routes < Sinatra::Base
   auth_tokens = {}
 
+  configure do
+    p 'Config'
+    db_config = YAML.load(File.open('db/config.yml'))
+    environment = ENV['ENV'] || 'development'
+    ActiveRecord::Base.establish_connection(db_config[environment])
+    set :public_folder, 'public'
+  end
+
   before do
     @user = User.where(id: auth_tokens[request.env['HTTP_AUTHORIZATION']]).first
   end
@@ -298,19 +306,4 @@ class Routes < Sinatra::Base
     { error: 'Failed to login' }.to_json
   end
 
-  if app_file == $PROGRAM_NAME
-    db_config = YAML.load(File.open('db/config.yml'))
-    environment = ENV['ENV'] || 'development'
-    ActiveRecord::Base.establish_connection(db_config[environment])
-    set :bind, '0.0.0.0'
-    set :public_folder, 'public'
-    set :raise_errors, true
-    set :dump_errors, false
-    set :show_exceptions, false
-    run!
-  else
-    db_config = YAML.load(File.open('db/config.yml'))
-    environment = ENV['ENV'] || 'development'
-    ActiveRecord::Base.establish_connection(db_config[environment])
-  end
 end
