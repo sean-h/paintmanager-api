@@ -155,7 +155,7 @@ class Routes < Sinatra::Base
   get '/paint_groups.json' do
     #return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
     results = CompatibilityGroup
-             .select('compatibility_groups.id, group_concat(compatibility_paints.paint_id) as "paint_id"')
+             .select("compatibility_groups.id, #{group_concat('compatibility_paints.paint_id')} as paint_id")
              .joins('LEFT OUTER JOIN compatibility_paints ON compatibility_groups.id = compatibility_groups_id')
              .group('compatibility_groups.id')
              .as_json
@@ -252,7 +252,7 @@ class Routes < Sinatra::Base
                      ON paints.id = paint_statuses.paint_id')
     status_keys = StatusKey.all
     groups = CompatibilityGroup
-             .select('compatibility_groups.id, group_concat(compatibility_paints.paint_id) as "paint_id"')
+             .select("compatibility_groups.id, #{group_concat('compatibility_paints.paint_id')} as paint_id")
              .joins('LEFT OUTER JOIN compatibility_paints ON compatibility_groups.id = compatibility_groups_id')
              .group('compatibility_groups.id')
              .as_json
@@ -304,6 +304,11 @@ class Routes < Sinatra::Base
       return { error: 'Failed to login' }.to_json
     end
     { error: 'Failed to login' }.to_json
+  end
+
+  def group_concat(column)
+    return "array_to_string(array_agg(#{column}), ',')" if ENV['ENV'] == 'production'
+    "group_concat(#{column})"
   end
 
 end
