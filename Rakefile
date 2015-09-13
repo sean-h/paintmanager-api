@@ -7,7 +7,8 @@ task :environment, :env do |t, args|
   desc 'Setup server environment'
   db_config = YAML::load(File.open('db/config.yml'))
   env = args[:env] || ENV['RACK_ENV'] || 'development'
-  ActiveRecord::Base.establish_connection(db_config[env])
+  db = ENV['DATABASE_URL'] || db_config[env]
+  ActiveRecord::Base.establish_connection(db)
 end
 
 namespace :db do
