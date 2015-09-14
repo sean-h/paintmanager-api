@@ -13,6 +13,10 @@ myApp.config(['$routeProvider',
         templateUrl: 'templates/compatibility.html',
         controller: 'PaintsController'
       }).
+      when('/manage', {
+        templateUrl: 'templates/manage.html',
+        controller: 'PaintsController'
+      }).
       when('/login', {
         templateUrl: 'templates/login.html',
         controller: 'LoginController'

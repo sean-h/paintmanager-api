@@ -1,0 +1,49 @@
+<div class="container">
+  <div class="col-md-4 col-md-offset-4 well">
+    <h2>Add Brand</h2>
+    <div class="form-group">
+      <label for="brand_name">Name</label>
+      <input type="text" class="form-control" id="brand_name" placeholder="Name" ng-model="brandName">
+    </div>
+    <button type="submit" class="btn btn-default"
+            ng-click="addBrand(brandName)">Add Brand</button>
+  </div>
+  <div class="col-md-4 col-md-offset-4 well">
+    <h2>Add Range</h2>
+    <div class="form-group">
+      <label for="brand_name">Brand</label>
+      <select class="form-control"
+              id="brand_name"
+              ng-model="brand"
+              ng-options="brand.name for brand in brands">
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="range_name">Name</label>
+      <input type="text" class="form-control" id="range_name" placeholder="Name" ng-model="rangeName">
+    </div>
+    <button type="submit" class="btn btn-default"
+            ng-click="addRange(brand, rangeName)">Add Brand</button>
+  </div>
+  <div class="col-md-4 col-md-offset-4 well">
+    <h2>Add Paint</h2>
+    <div class="form-group">
+      <label for="range">Range</label>
+      <select class="form-control"
+              id="range"
+              ng-model="range"
+              ng-options="range.name for range in paint_ranges">
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="paint_name">Name</label>
+      <input type="text" class="form-control" id="paint_name" placeholder="Name" ng-model="paintName">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon" id="color-preview" style="background-color: {{ paintColor }}">Color</span>
+      <input type="text" class="form-control" id="paint_color" placeholder="#ff00ff" ng-model="paintColor" aria-describedby="color-preview">
+    </div>
+    <button type="submit" class="btn btn-default"
+            ng-click="addPaint(range, paintName, paintColor)">Add Brand</button>
+  </div>
+</div>
