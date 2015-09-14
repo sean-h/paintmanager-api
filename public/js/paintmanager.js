@@ -99,6 +99,42 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
       return null;
     }
 
+    $scope.AddBrand = function(brandName) {
+      var post_data = "name=" + brandName;
+      $http({method: 'POST',
+             url: '/brands',
+             data: post_data,
+             headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
+        success(function(data, status, headers, config) {
+        }).
+        error(function(data, status, headers, config) {
+        });
+    }
+
+    $scope.AddRange = function(brand, rangeName) {
+      var post_data = "brand_id=" + brand.id + "&name=" + rangeName;
+      $http({method: 'POST',
+             url: '/ranges',
+             data: post_data,
+             headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
+        success(function(data, status, headers, config) {
+        }).
+        error(function(data, status, headers, config) {
+        });
+    }
+
+    $scope.AddPaint = function(range, paintName, paintColor) {
+      var post_data = "range_id=" + range.id + "&name=" + paintName + "&color=" + paintColor;
+      $http({method: 'POST',
+             url: '/paints',
+             data: post_data,
+             headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
+        success(function(data, status, headers, config) {
+        }).
+        error(function(data, status, headers, config) {
+        });
+    }
+
     $scope.NewCompatibilityGroup = function() {
         $scope.compatibility_groups.push({id: 0});
     };
