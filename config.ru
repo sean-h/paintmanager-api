@@ -1,3 +1,3 @@
-require './src/routes'
+require './src/paintmanager'
 
-run Routes
+run PaintManager

@@ -14,7 +14,7 @@ require_relative './status_key'
 require_relative './paint_status'
 
 # Entry point of the application.
-class Routes < Sinatra::Base
+class PaintManager < Sinatra::Base
   auth_tokens = {}
 
   configure do

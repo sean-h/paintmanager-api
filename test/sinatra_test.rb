@@ -1,7 +1,7 @@
 require 'json'
 require 'minitest/autorun'
 require 'rack/test'
-require_relative '../src/routes'
+require_relative '../src/paintmanager'
 
 # Parent class for tests.
 class SinatraTest < Minitest::Test
@@ -10,6 +10,6 @@ class SinatraTest < Minitest::Test
   # Returns the PaintManager app
   def app
     I18n.enforce_available_locales = false
-    Routes
+    PaintManager
   end
 end
