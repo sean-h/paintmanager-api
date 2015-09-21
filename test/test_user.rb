@@ -34,7 +34,6 @@ class TestUser < SinatraTest
     post 'user.json', user_data
     assert last_response.ok?
     data = JSON.parse last_response.body
-    p last_response.body
     assert(data.key?('errors'), 'Response does not contain an "errors" key')
   end
 

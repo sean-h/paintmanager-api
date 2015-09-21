@@ -8,4 +8,23 @@ class TestPaints < SinatraTest
     data = JSON.parse last_response.body
     assert_equal(1, data[0]['id'])
   end
+
+  def test_create_paint
+    header 'AUTHORIZATION', login
+    data = { name: 'Test Paint', color: '#FF00FF', range_id: 1 }
+    post '/paints', data
+    assert last_response.ok?
+    response = JSON.parse last_response.body
+    assert_equal(data[:name], response['name'])
+  end
+
+  def test_create_paint_errors
+    header 'AUTHORIZATION', login
+    data = { color: '#FF00FF', range_id: 1 }
+    post '/paints', data
+    assert last_response.ok?
+    response = JSON.parse last_response.body
+    assert(response.key?('error'), 'Response does not contain any errors')
+    assert(response['error'].key?('name'), 'Response does not contain missing name error')
+  end
 end

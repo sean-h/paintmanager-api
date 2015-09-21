@@ -8,6 +8,7 @@ require_relative './brand'
 require_relative './compatibility_group'
 require_relative './compatibility_paint'
 require_relative './paint'
+require_relative './paint_controller'
 require_relative './paint_range'
 require_relative './user'
 require_relative './status_key'
@@ -110,18 +111,8 @@ class PaintManager < Sinatra::Base
     end
   end
 
-  # @method /paints
-  # Returns all Paints.
-  get '/paints.json' do
-    return Paint.all.to_json
-  end
-
-  # @method /paints/id
-  # @param id [Integer] The Paint to fetch with given id.
-  # Returns Paint with given id.
-  get '/paints/:id.json' do |id|
-    return Paint.where(id: id).to_json
-  end
+  get '/paints.json' do PaintController.new.get_all_paints end
+  get '/paints/:id.json' do |id| return Paint.where(id: id).to_json end
 
   # @method /paints
   # @param name [String] The name of the Paint to create.
@@ -130,10 +121,7 @@ class PaintManager < Sinatra::Base
   # Returns the new Paint.
   post '/paints' do
     return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
-    paint = Paint.create(name: params[:name],
-                         color: params[:color],
-                         range_id: params[:range_id])
-    return paint.to_json
+    PaintController.new.add_paint(params[:name], params[:color], params[:range_id]).to_json
   end
 
   # @method /paints.json
@@ -256,7 +244,6 @@ class PaintManager < Sinatra::Base
              .joins('LEFT OUTER JOIN compatibility_paints ON compatibility_groups.id = compatibility_groups_id')
              .group('compatibility_groups.id')
              .as_json
-    p groups
     groups.each do |result|
       result['paint_id'] = result['paint_id'].split(',').map(&:to_i) unless result['paint_id'].nil?
     end
@@ -276,8 +263,6 @@ class PaintManager < Sinatra::Base
                  .first_or_create
         status.status = paint['status']
         status.save
-        p paint
-        p status
       end
     end
     last_sync = DateTime.strptime(json['last_sync'].to_s, '%Q')
