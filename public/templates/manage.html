@@ -1,49 +1,90 @@
 <div class="container">
   <div class="col-md-4 col-md-offset-4 well">
     <h2>Add Brand</h2>
-    <div class="form-group">
-      <label for="brand_name">Name</label>
-      <input type="text" class="form-control" id="brand_name" placeholder="Name" ng-model="brandName">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="btn btn-default active" data-toggle="tab" data-target="#brand-form">Form</li>
+      <li role="presentation" class="btn btn-default" data-toggle="tab" data-target="#brand-json">JSON</li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="brand-form">
+        <div class="form-group">
+          <label for="brand_name">Name</label>
+          <input type="text" class="form-control" id="brand_name" placeholder="Name" ng-model="brandName">
+        </div>
+        <button type="submit" class="btn btn-default"
+                ng-click="AddBrand(brandName)">Add Brand</button>
+      </div>
+
+      <div class="tab-pane" id="brand-json">
+
+      </div>
     </div>
-    <button type="submit" class="btn btn-default"
-            ng-click="AddBrand(brandName)">Add Brand</button>
   </div>
+
   <div class="col-md-4 col-md-offset-4 well">
     <h2>Add Range</h2>
-    <div class="form-group">
-      <label for="brand_name">Brand</label>
-      <select class="form-control"
-              id="brand_name"
-              ng-model="brand"
-              ng-options="brand.name for brand in brands">
-      </select>
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="btn btn-default active" data-toggle="tab" data-target="#range-form">Form</li>
+      <li role="presentation" class="btn btn-default" data-toggle="tab" data-target="#range-json">JSON</li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="range-form">
+        <div class="form-group">
+          <label for="brand_name">Brand</label>
+          <select class="form-control"
+                  id="brand_name"
+                  ng-model="brand"
+                  ng-options="brand.name for brand in brands">
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="range_name">Name</label>
+          <input type="text" class="form-control" id="range_name" placeholder="Name" ng-model="rangeName">
+        </div>
+        <button type="submit" class="btn btn-default"
+                ng-click="AddRange(brand, rangeName)">Add Brand</button>
+      </div>
+
+      <div class="tab-pane" id="range-json">
+
+      </div>
     </div>
-    <div class="form-group">
-      <label for="range_name">Name</label>
-      <input type="text" class="form-control" id="range_name" placeholder="Name" ng-model="rangeName">
-    </div>
-    <button type="submit" class="btn btn-default"
-            ng-click="AddRange(brand, rangeName)">Add Brand</button>
   </div>
+
   <div class="col-md-4 col-md-offset-4 well">
     <h2>Add Paint</h2>
-    <div class="form-group">
-      <label for="range">Range</label>
-      <select class="form-control"
-              id="range"
-              ng-model="range"
-              ng-options="range.name for range in paint_ranges">
-      </select>
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="btn btn-default active" data-toggle="tab" data-target="#paint-form">Form</li>
+      <li role="presentation" class="btn btn-default" data-toggle="tab" data-target="#paint-json">JSON</li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="paint-form">
+        <div class="form-group">
+          <label for="range">Range</label>
+          <select class="form-control"
+                  id="range"
+                  ng-model="range"
+                  ng-options="range.name for range in paint_ranges">
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="paint_name">Name</label>
+          <input type="text" class="form-control" id="paint_name" placeholder="Name" ng-model="paintName">
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon" id="color-preview" style="background-color: {{ paintColor }}">Color</span>
+          <input type="text" class="form-control" id="paint_color" placeholder="#ff00ff" ng-model="paintColor" aria-describedby="color-preview">
+        </div>
+        <button type="submit" class="btn btn-default"
+                ng-click="AddPaint(range, paintName, paintColor)">Add Brand</button>
+      </div>
+
+      <div class="tab-pane" id="paint-json">
+
+      </div>
     </div>
-    <div class="form-group">
-      <label for="paint_name">Name</label>
-      <input type="text" class="form-control" id="paint_name" placeholder="Name" ng-model="paintName">
-    </div>
-    <div class="input-group">
-      <span class="input-group-addon" id="color-preview" style="background-color: {{ paintColor }}">Color</span>
-      <input type="text" class="form-control" id="paint_color" placeholder="#ff00ff" ng-model="paintColor" aria-describedby="color-preview">
-    </div>
-    <button type="submit" class="btn btn-default"
-            ng-click="AddPaint(range, paintName, paintColor)">Add Brand</button>
   </div>
 </div>
