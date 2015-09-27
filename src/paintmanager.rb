@@ -5,6 +5,7 @@ require 'securerandom'
 require 'sinatra/activerecord'
 require 'sinatra/base'
 require_relative './brand'
+require_relative './brand_controller'
 require_relative './compatibility_group'
 require_relative './compatibility_paint'
 require_relative './paint'
@@ -38,17 +39,12 @@ class PaintManager < Sinatra::Base
     send_file File.join(settings.public_folder, 'index.html')
   end
 
-  # @method /brands
-  # Returns all Brands.
   get '/brands.json' do
-    return Brand.all.to_json
+    BrandController.new.get_all_brands
   end
 
-  # @method /brands/id
-  # @param id [Integer] The Brand's id.
-  # Returns Brand that matches the given id.
   get '/brands/:id.json' do |id|
-    return Brand.where(id: id).to_json
+    BrandController.new.get_brand(id)
   end
 
   # @method /brands
@@ -56,8 +52,7 @@ class PaintManager < Sinatra::Base
   # Returns the created Brand.
   post '/brands' do
     return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
-    brand = Brand.create(name: params[:name])
-    return brand.to_json
+    BrandController.new.add_brand(params[:name]).to_json
   end
 
   # @method /brands.json
@@ -111,8 +106,13 @@ class PaintManager < Sinatra::Base
     end
   end
 
-  get '/paints.json' do PaintController.new.get_all_paints end
-  get '/paints/:id.json' do |id| return Paint.where(id: id).to_json end
+  get '/paints.json' do
+    PaintController.new.get_all_paints
+  end
+
+  get '/paints/:id.json' do |id|
+    Paint.where(id: id).to_json
+  end
 
   # @method /paints
   # @param name [String] The name of the Paint to create.
