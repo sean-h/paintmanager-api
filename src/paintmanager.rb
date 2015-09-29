@@ -132,9 +132,9 @@ class PaintManager < Sinatra::Base
     json = JSON.parse(params[:json])
     paint_controller = PaintController.new
     json.each do |paint|
-      paint_controller.add_paint(name: paint['name'],
-                                 color: paint['color'],
-                                 range_id: paint['range_id'])
+      paint_controller.add_paint(paint['name'].chomp,
+                                 paint['color'].chomp,
+                                 paint['range_id'].chomp)
     end
     ''
   end
