@@ -134,7 +134,7 @@ class PaintManager < Sinatra::Base
     json.each do |paint|
       paint_controller.add_paint(paint['name'].chomp,
                                  paint['color'].chomp,
-                                 paint['range_id'].chomp)
+                                 paint['range_id'])
     end
     ''
   end
