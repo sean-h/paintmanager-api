@@ -61,11 +61,11 @@ class PaintManager < Sinatra::Base
     return 'Missing json data' if params[:json].nil?
 
     json = JSON.parse(params[:json])
-    if json['kind'] == 'Brand'
-      json['data'].each do |brand|
-        Brand.create(name: brand['name'])
-      end
+    json.each do |brand|
+      Brand.create(name: brand['name'])
     end
+
+    ''
   end
 
   # @method /ranges
@@ -98,12 +98,12 @@ class PaintManager < Sinatra::Base
     return 'Missing json data' if params[:json].nil?
 
     json = JSON.parse(params[:json])
-    if json['kind'] == 'Range'
-      json['data'].each do |range|
-        Range.create(name: range['name'],
-                     brand_id: range['brand_id'])
-      end
+    json.each do |range|
+      Range.create(name: range['name'],
+                   brand_id: range['brand_id'])
     end
+
+    ''
   end
 
   get '/paints.json' do
@@ -130,13 +130,13 @@ class PaintManager < Sinatra::Base
     return 'Missing json data' if params[:json].nil?
 
     json = JSON.parse(params[:json])
-    if json['kind'] == 'Paint'
-      json['data'].each do |paint|
-        Paint.create(name: paint['name'],
-                     color: paint['color'],
-                     range_id: paint['range_id'])
-      end
+    paint_controller = PaintController.new
+    json.each do |paint|
+      paint_controller.add_paint(name: paint['name'],
+                                 color: paint['color'],
+                                 range_id: paint['range_id'])
     end
+    ''
   end
 
   # @method /paint_groups.json

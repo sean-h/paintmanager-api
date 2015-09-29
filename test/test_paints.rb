@@ -63,4 +63,12 @@ class TestPaints < SinatraTest
     assert(response.key?('error'), 'Response does not contain any errors')
     assert(response['error'].key?('range_id'), 'Response does not contain missing range_id error')
   end
+
+  def test_create_paint_json
+    header 'AUTHORIZATION', login
+    data = { json: JSON([{ name: 'Test Paint', color: '#FF00FF', range_id: 1 }]) }
+    post '/paints', data
+    assert last_response.ok?
+    response = JSON.parse last_response.body
+  end
 end

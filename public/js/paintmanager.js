@@ -111,6 +111,18 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
         });
     }
 
+    $scope.AddBrandJson = function(json) {
+      var post_data = "json=" + JSON.stringify(JSON.parse(json));
+      $http({method: 'POST',
+             url: '/brands.json',
+             data: post_data,
+             headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
+        success(function(data, status, headers, config) {
+        }).
+        error(function(data, status, headers, config) {
+        });
+    }
+
     $scope.AddRange = function(brand, rangeName) {
       var post_data = "brand_id=" + brand.id + "&name=" + rangeName;
       $http({method: 'POST',
@@ -123,10 +135,34 @@ myApp.controller('PaintsController', ['$scope', '$http', function($scope, $http)
         });
     }
 
+    $scope.AddRangeJson = function(json) {
+      var post_data = "json=" + JSON.stringify(JSON.parse(json));
+      $http({method: 'POST',
+             url: '/ranges.json',
+             data: post_data,
+             headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
+        success(function(data, status, headers, config) {
+        }).
+        error(function(data, status, headers, config) {
+        });
+    }
+
     $scope.AddPaint = function(range, paintName, paintColor) {
       var post_data = "range_id=" + range.id + "&name=" + paintName + "&color=" + paintColor;
       $http({method: 'POST',
              url: '/paints',
+             data: post_data,
+             headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
+        success(function(data, status, headers, config) {
+        }).
+        error(function(data, status, headers, config) {
+        });
+    }
+
+    $scope.AddPaintJson = function(json) {
+      var post_data = "json=" + JSON.stringify(JSON.parse(json));
+      $http({method: 'POST',
+             url: '/paints.json',
              data: post_data,
              headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).
         success(function(data, status, headers, config) {
