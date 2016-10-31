@@ -14,6 +14,7 @@ require_relative './paint_range'
 require_relative './user'
 require_relative './status_key'
 require_relative './paint_status'
+require_relative './barcode'
 
 # Entry point of the application.
 class PaintManager < Sinatra::Base
@@ -139,6 +140,11 @@ class PaintManager < Sinatra::Base
     ''
   end
 
+  # @method /barcodes.json
+  get '/barcodes.json' do
+    Barcode.all.to_json
+  end
+
   # @method /paint_groups.json
   get '/paint_groups.json' do
     #return { auth_error: 'You must be logged in to access this page' }.to_json if @user.nil?
@@ -238,6 +244,7 @@ class PaintManager < Sinatra::Base
                            COALESCE(paint_statuses.status, 1) AS status')
              .joins('LEFT OUTER JOIN paint_statuses
                      ON paints.id = paint_statuses.paint_id')
+    barcodes = Barcode.all
     status_keys = StatusKey.all
     groups = CompatibilityGroup
              .select("compatibility_groups.id, #{group_concat('compatibility_paints.paint_id')} as paint_id")
@@ -247,8 +254,11 @@ class PaintManager < Sinatra::Base
     groups.each do |result|
       result['paint_id'] = result['paint_id'].split(',').map(&:to_i) unless result['paint_id'].nil?
     end
-    data = { brand: brands, paint_range: ranges,
-             paint: paints, status_key: status_keys,
+    data = { brand: brands,
+             paint_range: ranges,
+             paint: paints,
+             barcode: barcodes,
+             status_key: status_keys,
              compatibility_groups: groups }
     return data.to_json
   end
@@ -275,7 +285,8 @@ class PaintManager < Sinatra::Base
              .joins('LEFT OUTER JOIN paint_statuses
                      ON paints.id = paint_statuses.paint_id')
              .where('paint_statuses.updated_at > ? AND user_id = ?', last_sync_formatted, @user.id)
-    data = { brand: brands, paint_range: ranges, paint: paints }
+    barcodes = Barcode.where('updated_at > ?', last_sync_formatted)
+    data = { brand: brands, paint_range: ranges, paint: paints, barcode: barcodes }
     return data.to_json
   end
 
